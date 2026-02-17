@@ -15,7 +15,10 @@
                 <article class="card-lift overflow-hidden rounded-xl border border-slate-200 bg-white shadow-soft reveal">
                     <div class="product-image-shell">
                         {% if product.image %}
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% load static %}
+                            <img src="{% static 'assets/image/products/' %}{{ product.slug }}.jpg" 
+                                 alt="{{ product.name }}" 
+                                 class="product-image">
                         {% else %}
                             <div class="placeholder-img">No image available</div>
                         {% endif %}

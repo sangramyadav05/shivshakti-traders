@@ -50,18 +50,6 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
 ]
 
-# Cloudinary storage for media (recommended on Render free tier)
-USE_CLOUDINARY = env_bool('DJANGO_USE_CLOUDINARY', False)
-if USE_CLOUDINARY:
-    INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', ''),
-        'API_KEY': env('CLOUDINARY_API_KEY', ''),
-        'API_SECRET': env('CLOUDINARY_API_SECRET', ''),
-        'SECURE': True,
-    }
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -119,9 +107,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = Path(env('DJANGO_MEDIA_ROOT', str(BASE_DIR / 'media')))
-# Only serve media via Django when not using Cloudinary
-SERVE_MEDIA = env_bool('DJANGO_SERVE_MEDIA', DEBUG and not USE_CLOUDINARY)
+MEDIA_ROOT = BASE_DIR / 'media'
+SERVE_MEDIA = env_bool('DJANGO_SERVE_MEDIA', DEBUG)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -166,7 +153,7 @@ CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", 'https://cdn.tailwindcss.com', 'h
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'https://fonts.googleapis.com')
 CSP_FONT_SRC = ("'self'", 'https://fonts.gstatic.com', 'data:')
 CSP_IMG_SRC = ("'self'", 'data:', 'https:')
-CSP_CONNECT_SRC = ("'self'", 'https://www.google.com', 'https://api.cloudinary.com', 'https://res.cloudinary.com')
+CSP_CONNECT_SRC = ("'self'", 'https://www.google.com')
 CSP_FRAME_SRC = ('https://www.google.com', 'https://www.gstatic.com')
 CSP_OBJECT_SRC = ("'none'",)
 CSP_BASE_URI = ("'self'",)
