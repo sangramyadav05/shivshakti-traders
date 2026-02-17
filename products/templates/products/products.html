@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-{% load static %}
+﻿{% extends 'base.html' %}
 {% block page_title %}Products | Shivshakti Traders{% endblock %}
 {% block meta_description %}Browse the complete product catalog from Shivshakti Traders.{% endblock %}
 
@@ -16,8 +15,7 @@
                 <article class="card-lift overflow-hidden rounded-xl border border-slate-200 bg-white shadow-soft reveal">
                     <div class="product-image-shell">
                         {% if product.image %}
-                            <img src="{% static 'assets/image/products/' %}{{ product.image.name|cut:'products/' }}" alt="{{ product.name }}">
-
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
                         {% else %}
                             <div class="placeholder-img">No image available</div>
                         {% endif %}
@@ -37,13 +35,13 @@
 
         {% if is_paginated %}
             <nav class="mt-10 flex items-center gap-3" aria-label="Product pagination">
-                    {% if page_obj.has_previous %}
-                        <a class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                    {% endif %}
-                    <span class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white">{{ page_obj.number }}</span>
-                    {% if page_obj.has_next %}
-                        <a class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500" href="?page={{ page_obj.next_page_number }}">Next</a>
-                    {% endif %}
+                {% if page_obj.has_previous %}
+                    <a class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+                <span class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white">{{ page_obj.number }}</span>
+                {% if page_obj.has_next %}
+                    <a class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500" href="?page={{ page_obj.next_page_number }}">Next</a>
+                {% endif %}
             </nav>
         {% endif %}
     </div>
