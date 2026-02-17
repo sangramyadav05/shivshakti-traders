@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block page_title %}Enquiry | Shivshakti Traders{% endblock %}
+{% block meta_description %}Submit your enquiry to Shivshakti Traders and select relevant products.{% endblock %}
+
+{% block content %}
+<section class="py-16">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 reveal">
+            <h1 class="text-4xl font-semibold text-slate-900">General Enquiry</h1>
+            <p class="mt-3 text-slate-600">Submit your enquiry and select one or more relevant products.</p>
+        </div>
+
+        <form method="post" class="reveal space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-soft sm:p-8">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.name != 'recaptcha_token' %}
+                    {% if field.name == 'products' %}
+                        <div>
+                            <label class="mb-2 block text-sm font-semibold text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <div class="hidden">
+                                {{ field }}
+                            </div>
+                            <select id="products-picker" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-slate-800 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-300/40">
+                                <option value="" selected>No product selected</option>
+                                {% for product in field.field.queryset %}
+                                    <option value="{{ product.id }}">{{ product.name }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if field.help_text %}
+                                <small class="mt-1 block text-xs text-slate-500">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="mt-1 text-sm text-red-600">{{ field.errors|striptags }}</div>
+                            {% endif %}
+
+                            <div class="mt-3">
+                                <label class="mb-2 block text-sm font-semibold text-slate-700">Selected Products</label>
+                                <div id="selected-products-box" class="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                                    <p class="text-slate-500" id="selected-products-empty">No products selected yet.</p>
+                                    <div id="selected-products-list" class="flex flex-wrap gap-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="floating-field">
+                            {{ field }}
+                            <label class="floating-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% if field.help_text %}
+                                <small class="mt-1 block text-xs text-slate-500">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="mt-1 text-sm text-red-600">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {{ form.recaptcha_token }}
+            {% if recaptcha_enabled %}
+                <div>
+                    <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}" data-callback="setRecaptchaToken"></div>
+                    {% if form.recaptcha_token.errors %}
+                        <div class="mt-1 text-sm text-red-600">{{ form.recaptcha_token.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% if form.non_field_errors %}
+                <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ form.non_field_errors|striptags }}</div>
+            {% endif %}
+
+            <button type="submit" class="inline-flex rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Submit General Enquiry</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_meta %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var select = document.getElementById('id_products');
+    var picker = document.getElementById('products-picker');
+    var list = document.getElementById('selected-products-list');
+    var empty = document.getElementById('selected-products-empty');
+    var form = picker ? picker.closest('form') : null;
+
+    if (!select || !picker || !list || !empty || !form) {
+        return;
+    }
+
+    var selectedValues = new Set(
+        Array.from(select.options)
+            .filter(function (opt) { return opt.selected; })
+            .map(function (opt) { return opt.value; })
+    );
+
+    function syncHiddenSelect() {
+        Array.from(select.options).forEach(function (opt) {
+            opt.selected = selectedValues.has(opt.value);
+        });
+    }
+
+    function getPickerOptionByValue(value) {
+        return Array.from(picker.options).find(function (opt) {
+            return opt.value === value;
+        });
+    }
+
+    function renderSelectedProducts() {
+        list.innerHTML = '';
+        var selected = Array.from(selectedValues);
+
+        if (selected.length === 0) {
+            empty.classList.remove('hidden');
+            return;
+        }
+
+        empty.classList.add('hidden');
+
+        selected.forEach(function (value) {
+            var source = getPickerOptionByValue(value);
+            if (!source) {
+                return;
+            }
+
+            var wrapper = document.createElement('span');
+            wrapper.className = 'inline-flex items-center gap-2 rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-700';
+
+            var label = document.createElement('span');
+            label.textContent = source.text;
+
+            var removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-400 text-[10px] text-white transition hover:bg-slate-500';
+            removeBtn.setAttribute('aria-label', 'Remove ' + source.text);
+            removeBtn.textContent = 'x';
+            removeBtn.addEventListener('click', function () {
+                selectedValues.delete(value);
+                syncHiddenSelect();
+                renderSelectedProducts();
+            });
+
+            wrapper.appendChild(label);
+            wrapper.appendChild(removeBtn);
+            list.appendChild(wrapper);
+        });
+    }
+
+    function addSelectedFromPicker() {
+        var selectedValue = picker.value;
+        if (!selectedValue) {
+            return;
+        }
+
+        selectedValues.add(selectedValue);
+        syncHiddenSelect();
+        picker.value = '';
+        renderSelectedProducts();
+    }
+
+    picker.addEventListener('change', addSelectedFromPicker);
+
+    form.addEventListener('submit', function () {
+        syncHiddenSelect();
+    });
+
+    syncHiddenSelect();
+    renderSelectedProducts();
+});
+</script>
+{% if recaptcha_enabled %}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+function setRecaptchaToken(token) {
+    var field = document.getElementById('id_recaptcha_token');
+    if (field) {
+        field.value = token;
+    }
+}
+</script>
+{% endif %}
+{% endblock %}
+

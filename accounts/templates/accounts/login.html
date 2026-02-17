@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block page_title %}Login | Shivshakti Traders{% endblock %}
+
+{% block content %}
+<section class="py-16">
+    <div class="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
+        <div class="reveal mb-6">
+            <h1 class="text-3xl font-semibold text-slate-900">Account Login</h1>
+            <p class="mt-2 text-slate-600">Sign in to continue to your account dashboard.</p>
+        </div>
+        <form method="post" class="reveal space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
+            {% csrf_token %}
+            {% for field in form %}
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="mt-1 text-sm text-red-600">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="inline-flex rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Login</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

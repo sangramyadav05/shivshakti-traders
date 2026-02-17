@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block page_title %}Contact | Shivshakti Traders{% endblock %}
+{% block meta_description %}Get in touch with Shivshakti Traders via phone, email, address, or map location.{% endblock %}
+
+{% block content %}
+<section class="py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="reveal mb-8">
+            <h1 class="text-4xl font-semibold text-slate-900">Contact Us</h1>
+            <p class="mt-3 text-slate-600">Reach our team quickly through phone, email, or location details.</p>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <article class="reveal rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
+                <div class="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-700">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.78.65 2.62a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.46-1.31a2 2 0 0 1 2.11-.45c.84.31 1.72.53 2.62.65A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                </div>
+                <h2 class="text-lg font-semibold text-slate-900">Phone</h2>
+                <p class="mt-2 text-slate-600">{{ contact_phone }}</p>
+            </article>
+            <article class="reveal rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
+                <div class="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-700">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16v16H4z"/>
+                        <path d="M22 6l-10 7L2 6"/>
+                    </svg>
+                </div>
+                <h2 class="text-lg font-semibold text-slate-900">Email</h2>
+                <p class="mt-2 text-slate-600">{{ contact_email }}</p>
+            </article>
+            <article class="reveal rounded-2xl border border-slate-200 bg-white p-6 shadow-soft sm:col-span-2 lg:col-span-1">
+                <div class="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-700">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                </div>
+                <h2 class="text-lg font-semibold text-slate-900">Address</h2>
+                <p class="mt-2 text-slate-600">{{ contact_address }}</p>
+            </article>
+        </div>
+
+        <div class="reveal slide-left mt-8">
+            <h2 class="mb-3 text-xl font-semibold text-slate-900">Location Map</h2>
+            <div class="grid gap-5 lg:grid-cols-4">
+            <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-soft lg:col-span-3">
+                <div class="aspect-[16/9] overflow-hidden rounded-xl">
+                    <iframe
+                        class="h-full w-full"
+                        src="{{ map_embed_url }}"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Business location map">
+                    </iframe>
+                </div>
+            </div>
+            <div class="flex min-h-[220px] items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 shadow-soft lg:col-span-1">
+                <a href="{% url 'enquiries:enquiry' %}" class="inline-flex rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Go to Enquiry Form</a>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

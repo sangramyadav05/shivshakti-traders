@@ -1,0 +1,158 @@
+﻿{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{% block meta_description %}Shivshakti Traders offers reliable business products and solutions with quality service.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}Shivshakti Traders, products, business, trading, industrial supplies{% endblock %}">
+    <meta name="author" content="Shivshakti Traders">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}{% block title %}Shivshakti Traders{% endblock %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Shivshakti Traders offers reliable business products and solutions with quality service.{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{% static 'assets/image/logo.png' %}{% endblock %}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Shivshakti Traders{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Business products and services by Shivshakti Traders.{% endblock %}">
+    <title>Shivshakti Traders</title>
+    <link rel="icon" type="image/png" href="{% static 'assets/image/favicon-rounded.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'assets/image/favicon-rounded.png' %}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                900: '#0F3D5E',
+                800: '#0c334f',
+                700: '#11486d',
+                600: '#1976D2',
+                500: '#1E88E5',
+                300: '#6fb7f0'
+              },
+              accent: '#00A878'
+            },
+            boxShadow: {
+              soft: '0 14px 30px rgba(6, 28, 52, 0.12)',
+              lift: '0 20px 38px rgba(6, 28, 52, 0.16)'
+            }
+          }
+        }
+      };
+    </script>
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    {% block extra_meta %}{% endblock %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Shivshakti Traders",
+      "url": "{{ request.scheme }}://{{ request.get_host }}",
+      "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'assets/image/logo.png' %}",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-90000-00000",
+        "contactType": "customer service",
+        "email": "info@shivshaktitraders.com"
+      }
+    }
+    </script>
+</head>
+<body class="bg-[#F4F6F8] text-[#222222] antialiased">
+<div id="scrollProgress" class="scroll-progress" aria-hidden="true"></div>
+<header class="sticky top-0 z-50">
+    <nav id="siteNavbar" class="nav-shell transition-all duration-300">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+            <a class="inline-flex items-center gap-3 text-2xl font-bold tracking-tight text-white" href="{% url 'core:home' %}">
+                <img src="{% static 'assets/image/logo.png' %}" alt="Shivshakti Traders Logo" class="h-10 w-10 rounded-md border border-white/30 bg-white/95 object-contain p-1">
+                <span>Shivshakti Traders</span>
+            </a>
+            <button id="navToggle" class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/25 text-white md:hidden" type="button" aria-label="Toggle navigation">
+                <span class="block h-0.5 w-5 bg-white"></span>
+            </button>
+            <ul id="mainNav" class="hidden items-center gap-2 md:flex">
+                <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'core:home' %}">Home</a></li>
+                <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'core:about' %}">About</a></li>
+                <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'products:product_list' %}">Products</a></li>
+                <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'core:contact' %}">Contact</a></li>
+                <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'enquiries:enquiry' %}">Enquiry</a></li>
+                <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'custom_admin_login' %}">Admin Login</a></li>
+            </ul>
+        </div>
+        <div id="mobileNav" class="hidden border-t border-white/10 bg-brand-900 px-4 pb-4 md:hidden">
+            <ul class="space-y-2 pt-3">
+                <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'core:home' %}">Home</a></li>
+                <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'core:about' %}">About</a></li>
+                <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'products:product_list' %}">Products</a></li>
+                <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'core:contact' %}">Contact</a></li>
+                <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'enquiries:enquiry' %}">Enquiry</a></li>
+                <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'custom_admin_login' %}">Admin Login</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main class="site-main min-h-[70vh]">
+    {% for message in messages %}
+        <div class="mx-auto mt-4 max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div class="rounded-lg border border-accent/30 bg-white px-4 py-3 text-sm text-[#222222] shadow-sm">{{ message }}</div>
+        </div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="mt-14 border-t border-white/10 bg-brand-900 text-slate-300">
+    <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-2 lg:px-8">
+        <div>
+            <h2 class="text-sm font-semibold uppercase tracking-[0.18em] text-white">Quick Links</h2>
+            <ul class="mt-4 space-y-2 text-sm">
+                <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'core:home' %}">Home</a></li>
+                <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'core:about' %}">About</a></li>
+                <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'products:product_list' %}">Products</a></li>
+                <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'core:contact' %}">Contact</a></li>
+                <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'enquiries:enquiry' %}">Enquiry</a></li>
+                <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'custom_admin_login' %}">Admin Login</a></li>
+            </ul>
+        </div>
+        <div>
+            <h2 class="text-sm font-semibold uppercase tracking-[0.18em] text-white">Contact Info</h2>
+            <div class="mt-4 space-y-2 text-sm">
+                <p>Phone: +91-90000-00000</p>
+                <p>Email: info@shivshaktitraders.com</p>
+                <p>Address: Industrial Area, India</p>
+            </div>
+            <div class="mt-5 flex items-center gap-3">
+                <a href="#" aria-label="Facebook" class="group inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-300/80 hover:bg-brand-500/20">
+                    <svg viewBox="0 0 24 24" class="h-4 w-4 fill-slate-300 transition-colors duration-200 group-hover:fill-brand-300" aria-hidden="true">
+                        <path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.5-3.88 3.77-3.88 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.25 0-1.64.77-1.64 1.56V12h2.8l-.45 2.9h-2.35v6.99A10 10 0 0 0 22 12z"/>
+                    </svg>
+                </a>
+                <a href="#" aria-label="Instagram" class="group inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-300/80 hover:bg-brand-500/20">
+                    <svg viewBox="0 0 24 24" class="h-4 w-4 fill-slate-300 transition-colors duration-200 group-hover:fill-brand-300" aria-hidden="true">
+                        <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.75a4 4 0 0 0-4 4v8.5a4 4 0 0 0 4 4h8.5a4 4 0 0 0 4-4v-8.5a4 4 0 0 0-4-4h-8.5zm8.88 1.37a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5z"/>
+                    </svg>
+                </a>
+                <a href="#" aria-label="LinkedIn" class="group inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-300/80 hover:bg-brand-500/20">
+                    <svg viewBox="0 0 24 24" class="h-4 w-4 fill-slate-300 transition-colors duration-200 group-hover:fill-brand-300" aria-hidden="true">
+                        <path d="M6.94 8.5A1.56 1.56 0 1 1 6.94 5.4a1.56 1.56 0 0 1 0 3.1zM5.56 9.75h2.75V18H5.56V9.75zm4.5 0h2.64v1.13h.04c.37-.7 1.27-1.43 2.61-1.43 2.8 0 3.32 1.84 3.32 4.23V18h-2.75v-3.83c0-.92-.01-2.1-1.28-2.1-1.29 0-1.49 1-1.49 2.04V18h-2.75V9.75z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-white/10 py-4 text-center text-xs text-slate-400">
+        <p>&copy; 2026 Shivshakti Traders. All rights reserved.</p>
+        <p class="mt-1">built by Sangram Yadav</p>
+    </div>
+</footer>
+
+<script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+</html>
+

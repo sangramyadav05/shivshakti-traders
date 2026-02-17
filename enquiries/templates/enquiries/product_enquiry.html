@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block page_title %}Enquiry for {{ product.name }} | Shivshakti Traders{% endblock %}
+
+{% block content %}
+<section class="py-16">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <h1 class="mb-8 text-4xl font-semibold text-slate-900 reveal">Enquiry for {{ product.name }}</h1>
+        <form method="post" class="reveal space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-soft sm:p-8">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.name != 'recaptcha_token' %}
+                    <div class="floating-field">
+                        {{ field }}
+                        <label class="floating-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {% if field.errors %}
+                            <div class="mt-1 text-sm text-red-600">{{ field.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            {{ form.recaptcha_token }}
+            {% if recaptcha_enabled %}
+                <div>
+                    <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}" data-callback="setRecaptchaToken"></div>
+                </div>
+            {% endif %}
+
+            <button type="submit" class="inline-flex rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Submit Product Enquiry</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_meta %}
+{% if recaptcha_enabled %}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+function setRecaptchaToken(token) {
+    var field = document.getElementById('id_recaptcha_token');
+    if (field) {
+        field.value = token;
+    }
+}
+</script>
+{% endif %}
+{% endblock %}
