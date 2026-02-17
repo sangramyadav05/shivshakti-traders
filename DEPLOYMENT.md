@@ -1,4 +1,4 @@
-# Deployment Readiness
+﻿# Deployment Readiness
 
 ## 1) Production settings
 Set these environment variables:
@@ -12,23 +12,28 @@ Set these environment variables:
 
 Security headers and CSP are enabled by default via settings + middleware.
 
-## 2) PostgreSQL
+## 2) Database (Render PostgreSQL)
 Configure:
 
-- POSTGRES_DB
-- POSTGRES_USER
-- POSTGRES_PASSWORD
-- POSTGRES_HOST
-- POSTGRES_PORT
-- POSTGRES_SSLMODE=require (recommended in production)
+- DATABASE_URL=<render-postgres-internal-url>
 
-## 3) Admin hardening
+## 3) Media storage on Render Free (Cloudinary)
+Use Cloudinary (recommended for free tier):
+
+- DJANGO_USE_CLOUDINARY=true
+- CLOUDINARY_CLOUD_NAME
+- CLOUDINARY_API_KEY
+- CLOUDINARY_API_SECRET
+
+Note: When Cloudinary is enabled, no persistent disk is required for product images.
+
+## 4) Admin hardening
 Set non-default paths:
 
 - DJANGO_ADMIN_URL=<random-path>/
 - DJANGO_ADMIN_LOGIN_URL=<custom-login>/
 
-## 4) Email + reCAPTCHA
+## 5) Email + reCAPTCHA
 Set:
 
 - DJANGO_ADMIN_NOTIFICATION_EMAIL
@@ -38,7 +43,7 @@ Set:
 - DJANGO_RECAPTCHA_SITE_KEY
 - DJANGO_RECAPTCHA_SECRET_KEY
 
-## 5) Login and enquiry throttling
+## 6) Login and enquiry throttling
 Set:
 
 - ENQUIRY_RATE_LIMIT_WINDOW_SECONDS
@@ -46,13 +51,13 @@ Set:
 - LOGIN_RATE_LIMIT_WINDOW_SECONDS
 - LOGIN_RATE_LIMIT_MAX_ATTEMPTS
 
-## 6) Run deployment commands
+## 7) Run deployment commands
 
 - python manage.py migrate
 - python manage.py collectstatic --noinput
 - python manage.py check --deploy
 
-## 7) WSGI/ASGI
+## 8) WSGI/ASGI
 Use:
 
 - Project_shivshakti.wsgi:application
