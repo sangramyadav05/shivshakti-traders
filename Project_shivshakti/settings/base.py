@@ -2,12 +2,12 @@ import os
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 def env(name, default=None):
