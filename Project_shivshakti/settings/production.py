@@ -1,5 +1,4 @@
 ﻿from pathlib import Path
-from django.core.exceptions import ImproperlyConfigured
 from .base import *
 from decouple import config
 import dj_database_url
@@ -35,6 +34,14 @@ SECURE_HSTS_PRELOAD = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Render media configuration
+<<<<<<< HEAD
 MEDIA_URL = '/media/'
 MEDIA_ROOT = Path(config('DJANGO_MEDIA_ROOT', default='/var/data/media'))
 SERVE_MEDIA = config('DJANGO_SERVE_MEDIA', default=True, cast=bool)
+=======
+SERVE_MEDIA = config('DJANGO_SERVE_MEDIA', default=True, cast=bool)
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+>>>>>>> 1c9461c260e48aa913804cbc84984bfc5e095fc8

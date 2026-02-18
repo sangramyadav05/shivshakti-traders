@@ -17,15 +17,13 @@ Configure:
 
 - DATABASE_URL=<render-postgres-internal-url>
 
-## 3) Media storage on Render Free (Cloudinary)
-Use Cloudinary (recommended for free tier):
+## 3) Media on Render
+For uploaded product images, use:
 
-- DJANGO_USE_CLOUDINARY=true
-- CLOUDINARY_CLOUD_NAME
-- CLOUDINARY_API_KEY
-- CLOUDINARY_API_SECRET
+- DJANGO_MEDIA_ROOT=/var/data/media
+- DJANGO_SERVE_MEDIA=true
 
-Note: When Cloudinary is enabled, no persistent disk is required for product images.
+Note: On Render free tier, filesystem is ephemeral. Uploaded files can be lost on restart/redeploy.
 
 ## 4) Admin hardening
 Set non-default paths:
