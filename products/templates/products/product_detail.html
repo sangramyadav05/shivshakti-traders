@@ -8,31 +8,9 @@
         <div class="detail-fade">
             <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-soft">
                 {% if product.image %}
-                {% load static %}
-
-
-                {% if product.slug == "bleaching-powder-25kg-packaging" %}
-                <img src="{% static 'static/assests/image/products/bleaching-powder-25kg-packaging.jpg' %}">
-                {% elif product.slug == "sodium-hypochlorite-liquid" %}
-                <img src="{% static 'static/assests/image/products/sodium-hypochlorite-liquid.jpg' %}">
-                {% endif %}
-
-
-                {% if product.slug == "aalam-alum-solid-crystal" %}
-                <img src="{% static 'static/assests/image/products/aalam-alum-solid-crystal.jpg' %}">
-                {% elif product.slug == "medicore-m-100ml-bottle" %}
-                <img src="{% static 'static/assests/image/products/medicore-m-100ml-bottle.jpg' %}">
-                {% endif %}
-
-                {% if product.slug == "bleaching-powder-5kg-packaging" %}
-                <img src="{% static 'static/assests/image/products/bleaching-powder-5kg-packaging.jpg' %}">
-                {% elif product.slug == "medicore-m-30ml-bottle" %}
-                <img src="{% static 'static/assests/image/products/medicore-m-30ml-bottle.jpg' %}">
-                {% endif %}
-
-
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="aspect-square w-full object-contain">
                 {% else %}
-                <div class="placeholder-img large">No image available</div>
+                    <div class="placeholder-img large">No image available</div>
                 {% endif %}
             </div>
         </div>
@@ -49,34 +27,30 @@
             </div>
 
             <div class="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
-                <h2 class="mb-4 text-lg font-semibold uppercase tracking-wide text-slate-800">Required Information</h2>
+                <h2 class="mb-4 text-lg font-semibold uppercase tracking-wide text-slate-800">Product Specific Enquiry</h2>
                 <form method="post" action="{% url 'enquiries:product_enquiry' product.slug %}" class="space-y-4">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}">
                     {% for field in product_enquiry_form %}
-                    {% if field.name != 'recaptcha_token' %}
-                    <div>
-                        <label class="mb-2 block text-sm font-semibold text-slate-700" for="{{ field.id_for_label }}">{{
-                            field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                        <div class="mt-1 text-sm text-red-600">{{ field.errors|striptags }}</div>
+                        {% if field.name != 'recaptcha_token' %}
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="mt-1 text-sm text-red-600">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
                         {% endif %}
-                    </div>
-                    {% endif %}
                     {% endfor %}
 
                     {{ product_enquiry_form.recaptcha_token }}
                     {% if recaptcha_enabled %}
-                    <div>
-                        <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"
-                            data-callback="setProductRecaptchaToken"></div>
-                    </div>
+                        <div>
+                            <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}" data-callback="setProductRecaptchaToken"></div>
+                        </div>
                     {% endif %}
 
-                    <button type="submit"
-                        class="detail-cta inline-flex rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Submit
-                        Product Enquiry</button>
+                    <button type="submit" class="detail-cta inline-flex rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Submit Product Enquiry</button>
                 </form>
             </div>
         </div>
@@ -88,12 +62,12 @@
 {% if recaptcha_enabled %}
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
-    function setProductRecaptchaToken(token) {
-        var field = document.getElementById('id_recaptcha_token');
-        if (field) {
-            field.value = token;
-        }
+function setProductRecaptchaToken(token) {
+    var field = document.getElementById('id_recaptcha_token');
+    if (field) {
+        field.value = token;
     }
+}
 </script>
 {% endif %}
 {% endblock %}

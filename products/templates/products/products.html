@@ -12,62 +12,37 @@
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {% for product in products %}
-            <article class="card-lift overflow-hidden rounded-xl border border-slate-200 bg-white shadow-soft reveal">
-                <div class="product-image-shell">
-                    {% if product.image %}
-                    {% load static %}
-                    {% if product.slug == "bleaching-powder-25kg-packaging" %}
-                    <img src="{% static 'static/assests/image/products/bleaching-powder-25kg-packaging.jpg' %}">
-                    {% elif product.slug == "sodium-hypochlorite-liquid" %}
-                    <img src="{% static 'static/assests/image/products/sodium-hypochlorite-liquid.jpg' %}">
-                    {% endif %}
-
-
-                    {% if product.slug == "aalam-alum-solid-crystal" %}
-                    <img src="{% static 'static/assests/image/products/aalam-alum-solid-crystal.jpg' %}">
-                    {% elif product.slug == "medicore-m-100ml-bottle" %}
-                    <img src="{% static 'static/assests/image/products/medicore-m-100ml-bottle.jpg' %}">
-                    {% endif %}
-
-                    {% if product.slug == "bleaching-powder-5kg-packaging" %}
-                    <img src="{% static 'static/assests/image/products/bleaching-powder-5kg-packaging.jpg' %}">
-                    {% elif product.slug == "medicore-m-30ml-bottle" %}
-                    <img src="{% static 'static/assests/image/products/medicore-m-30ml-bottle.jpg' %}">
-                    {% endif %}
-                    {% else %}
-                    <div class="placeholder-img">No image available</div>
-                    {% endif %}
-                </div>
-                <div class="relative flex min-h-[156px] flex-col p-5">
-                    <h2 class="product-card-title text-xl font-semibold leading-snug text-slate-900">{{ product.name }}
-                    </h2>
-                    <div class="absolute bottom-5 left-5 right-5 flex items-center justify-between">
-                        <a href="{% url 'enquiries:product_enquiry' product.slug %}"
-                            class="card-btn-secondary inline-flex w-fit rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-700 hover:text-slate-900">Enquiry</a>
-                        <a href="{{ product.get_absolute_url }}"
-                            class="card-btn-primary inline-flex w-fit rounded-md bg-brand-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-600">View
-                            Details</a>
+                <article class="card-lift overflow-hidden rounded-xl border border-slate-200 bg-white shadow-soft reveal">
+                    <div class="product-image-shell">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="placeholder-img">No image available</div>
+                        {% endif %}
                     </div>
-                </div>
-            </article>
+                    <div class="relative flex min-h-[156px] flex-col p-5">
+                        <h2 class="product-card-title text-xl font-semibold leading-snug text-slate-900">{{ product.name }}</h2>
+                        <div class="absolute bottom-5 left-5 right-5 flex items-center justify-between">
+                            <a href="{% url 'enquiries:product_enquiry' product.slug %}" class="card-btn-secondary inline-flex w-fit rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-700 hover:text-slate-900">Enquiry</a>
+                            <a href="{{ product.get_absolute_url }}" class="card-btn-primary inline-flex w-fit rounded-md bg-brand-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-600">View Details</a>
+                        </div>
+                    </div>
+                </article>
             {% empty %}
-            <p class="text-slate-600">No products available yet.</p>
+                <p class="text-slate-600">No products available yet.</p>
             {% endfor %}
         </div>
 
         {% if is_paginated %}
-        <nav class="mt-10 flex items-center gap-3" aria-label="Product pagination">
-            {% if page_obj.has_previous %}
-            <a class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500"
-                href="?page={{ page_obj.previous_page_number }}">Previous</a>
-            {% endif %}
-            <span class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white">{{ page_obj.number
-                }}</span>
-            {% if page_obj.has_next %}
-            <a class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500"
-                href="?page={{ page_obj.next_page_number }}">Next</a>
-            {% endif %}
-        </nav>
+            <nav class="mt-10 flex items-center gap-3" aria-label="Product pagination">
+                {% if page_obj.has_previous %}
+                    <a class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+                <span class="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white">{{ page_obj.number }}</span>
+                {% if page_obj.has_next %}
+                    <a class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-500" href="?page={{ page_obj.next_page_number }}">Next</a>
+                {% endif %}
+            </nav>
         {% endif %}
     </div>
 </section>

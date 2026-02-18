@@ -18,9 +18,12 @@ class HomePageView(TemplateView):
             product.slug: product
             for product in Product.objects.filter(is_active=True, slug__in=featured_slugs)
         }
-        context['featured_products'] = [
+        featured_products = [
             products_by_slug[slug] for slug in featured_slugs if slug in products_by_slug
         ]
+        if not featured_products:
+            featured_products = list(Product.objects.filter(is_active=True).order_by('name')[:3])
+        context['featured_products'] = featured_products
         return context
 
 
