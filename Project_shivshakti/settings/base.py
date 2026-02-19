@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'enquiries.apps.EnquiriesConfig',
     'accounts.apps.AccountsConfig',
     'api.apps.ApiConfig',
+    'dashboard.apps.DashboardConfig',
 ]
 
 MIDDLEWARE = [
@@ -261,3 +262,4 @@ SPECTACULAR_SETTINGS = {
         }
     },
 }
+
