@@ -7,7 +7,9 @@ from django.core.cache import cache
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import FormView, TemplateView
+from django_ratelimit.decorators import ratelimit
 
 
 def _apply_auth_widget_classes(form):
@@ -16,6 +18,10 @@ def _apply_auth_widget_classes(form):
         existing = field.widget.attrs.get('class', '')
         field.widget.attrs['class'] = f'{existing} {css}'.strip()
     return form
+
+
+def _admin_login_rate(group, request):
+    return getattr(settings, 'ADMIN_LOGIN_RATELIMIT', '5/m')
 
 
 class LoginRateLimitMixin:
@@ -81,10 +87,17 @@ class AccountDashboardView(TemplateView):
     template_name = 'accounts/dashboard.html'
 
 
-class StaffAdminLoginView(LoginRateLimitMixin, FormView):
+@method_decorator(ratelimit(key='ip', rate=_admin_login_rate, method='POST', block=False), name='dispatch')
+class StaffAdminLoginView(FormView):
     template_name = 'accounts/admin_login.html'
     form_class = AuthenticationForm
-    rate_limit_scope = 'admin-login'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == 'POST' and getattr(request, 'limited', False):
+            messages.error(request, 'Too many admin login attempts. Please try again in a minute.')
+            form = self.get_form()
+            return self.render_to_response(self.get_context_data(form=form), status=429)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse('admin:index')
@@ -94,22 +107,16 @@ class StaffAdminLoginView(LoginRateLimitMixin, FormView):
         return _apply_auth_widget_classes(form)
 
     def form_valid(self, form):
-        if self.is_rate_limited():
-            messages.error(self.request, 'Too many login attempts. Please wait and try again.')
-            return self.form_invalid(form)
-
         user = form.get_user()
         if not user.is_staff:
-            self.bump_rate_limit()
+            messages.error(self.request, 'Only staff users can access admin.')
             return HttpResponseForbidden('Only staff users can access admin.')
 
         login(self.request, user)
-        self.clear_rate_limit()
         return redirect(self.get_success_url())
 
     def form_invalid(self, form):
-        if not self.is_rate_limited():
-            self.bump_rate_limit()
+        messages.error(self.request, 'Invalid username or password.')
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):

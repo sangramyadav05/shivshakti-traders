@@ -120,6 +120,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Admin hardening
 ADMIN_URL = env('DJANGO_ADMIN_URL', 'secure-control-panel/')
 ADMIN_LOGIN_URL = env('DJANGO_ADMIN_LOGIN_URL', 'admin-login/')
+ADMIN_LOGIN_RATELIMIT = env('DJANGO_ADMIN_LOGIN_RATELIMIT', '5/m')
 
 # Enquiry protections
 ENQUIRY_RATE_LIMIT_WINDOW_SECONDS = env_int('ENQUIRY_RATE_LIMIT_WINDOW_SECONDS', 300)
