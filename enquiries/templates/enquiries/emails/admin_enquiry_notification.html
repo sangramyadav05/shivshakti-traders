@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial,sans-serif;color:#222222;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="640" cellspacing="0" cellpadding="0" style="max-width:640px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;">
+          <tr>
+            <td style="background:#0f3d5e;padding:18px 24px;color:#ffffff;">
+              <h2 style="margin:0;font-size:20px;">{{ business_name }} - New {{ enquiry_label }}</h2>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:20px 24px;">
+              <p style="margin:0 0 14px;">A new enquiry has been submitted.</p>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+                <tr><td style="padding:6px 0;font-weight:700;">Type:</td><td style="padding:6px 0;">{{ enquiry_label }}</td></tr>
+                <tr><td style="padding:6px 0;font-weight:700;">Name:</td><td style="padding:6px 0;">{{ enquiry.name }}</td></tr>
+                <tr><td style="padding:6px 0;font-weight:700;">Email:</td><td style="padding:6px 0;">{{ enquiry.email|default:'N/A' }}</td></tr>
+                <tr><td style="padding:6px 0;font-weight:700;">Phone:</td><td style="padding:6px 0;">{{ enquiry.phone|default:'N/A' }}</td></tr>
+                {% if enquiry_type == 'product' %}
+                <tr><td style="padding:6px 0;font-weight:700;">Product:</td><td style="padding:6px 0;">{{ product_name }}</td></tr>
+                {% else %}
+                <tr><td style="padding:6px 0;font-weight:700;">Products:</td><td style="padding:6px 0;">{{ products_text }}</td></tr>
+                {% endif %}
+              </table>
+              <div style="margin-top:14px;padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">
+                <p style="margin:0 0 6px;font-weight:700;">Message</p>
+                <p style="margin:0;white-space:pre-wrap;">{{ enquiry.message }}</p>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

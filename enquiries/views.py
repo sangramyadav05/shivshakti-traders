@@ -1,39 +1,18 @@
 import logging
+
 from django.conf import settings
 from django.contrib import messages
 from django.core.cache import cache
-from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.utils import timezone
 from django.views.generic import CreateView, TemplateView
+
 from products.models import Product
+
 from .forms import GeneralEnquiryForm, ProductEnquiryForm
+from .services import queue_enquiry_notification
 
 logger = logging.getLogger('enquiries')
-
-
-def _admin_recipient_list():
-    admin_email = getattr(settings, 'ADMIN_NOTIFICATION_EMAIL', '')
-    if admin_email:
-        return [admin_email]
-    if getattr(settings, 'ADMINS', None):
-        return [email for _, email in settings.ADMINS]
-    return []
-
-
-def _send_enquiry_email(subject, body):
-    recipients = _admin_recipient_list()
-    if not recipients:
-        return
-
-    send_mail(
-        subject=subject,
-        message=body,
-        from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@shivshaktitraders.com'),
-        recipient_list=recipients,
-        fail_silently=True,
-    )
 
 
 class EnquiryRateLimitMixin:
@@ -95,19 +74,8 @@ class GeneralEnquiryCreateView(EnquiryRateLimitMixin, CreateView):
         response = super().form_valid(form)
         self.bump_rate_limit()
 
-        selected_products = ', '.join(form.instance.products.values_list('name', flat=True)) or 'None selected'
-        _send_enquiry_email(
-            subject='New General Enquiry Submitted',
-            body=(
-                f'Time: {timezone.now()}\n'
-                f'Name: {form.instance.name}\n'
-                f'Email: {form.instance.email}\n'
-                f'Phone: {form.instance.phone or "N/A"}\n'
-                f'Products: {selected_products}\n\n'
-                f'Message:\n{form.instance.message}'
-            ),
-        )
-        logger.info('General enquiry submitted by %s (%s)', form.instance.name, form.instance.email)
+        queue_enquiry_notification(form.instance)
+        logger.info('General enquiry submitted and email task queued: %s', form.instance.id)
         messages.success(self.request, 'General enquiry submitted successfully.')
         return response
 
@@ -144,18 +112,8 @@ class ProductEnquiryCreateView(EnquiryRateLimitMixin, CreateView):
         response = super().form_valid(form)
         self.bump_rate_limit()
 
-        _send_enquiry_email(
-            subject=f'New Product Enquiry: {self.product.name}',
-            body=(
-                f'Time: {timezone.now()}\n'
-                f'Product: {self.product.name}\n'
-                f'Name: {form.instance.name}\n'
-                f'Email: {form.instance.email}\n'
-                f'Phone: {form.instance.phone or "N/A"}\n\n'
-                f'Message:\n{form.instance.message}'
-            ),
-        )
-        logger.info('Product enquiry submitted for %s by %s', self.product.slug, form.instance.email)
+        queue_enquiry_notification(form.instance)
+        logger.info('Product enquiry submitted and email task queued: %s', form.instance.id)
         messages.success(self.request, f'Product enquiry for {self.product.name} submitted successfully.')
 
         next_url = self.request.POST.get('next')

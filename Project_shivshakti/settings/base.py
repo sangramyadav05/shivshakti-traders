@@ -54,16 +54,19 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'api.apps.ApiConfig',
     'dashboard.apps.DashboardConfig',
+    'auditlog.apps.AuditlogConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'core.middleware.ContentSecurityPolicyMiddleware',
+    'core.middleware.AdminIPAllowlistMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'auditlog.middleware.AuditRequestContextMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -122,6 +125,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ADMIN_URL = env('DJANGO_ADMIN_URL', 'secure-control-panel/')
 ADMIN_LOGIN_URL = env('DJANGO_ADMIN_LOGIN_URL', 'admin-login/')
 ADMIN_LOGIN_RATELIMIT = env('DJANGO_ADMIN_LOGIN_RATELIMIT', '5/m')
+ALLOWED_ADMIN_IPS = [ip.strip() for ip in env('DJANGO_ALLOWED_ADMIN_IPS', '').split(',') if ip.strip()]
+USE_X_FORWARDED_FOR = env_bool('DJANGO_USE_X_FORWARDED_FOR', not DEBUG)
+
 
 # Enquiry protections
 ENQUIRY_RATE_LIMIT_WINDOW_SECONDS = env_int('ENQUIRY_RATE_LIMIT_WINDOW_SECONDS', 300)
@@ -136,6 +142,12 @@ RECAPTCHA_VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify'
 DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL', 'noreply@shivshaktitraders.com')
 ADMIN_NOTIFICATION_EMAIL = env('DJANGO_ADMIN_NOTIFICATION_EMAIL', 'admin@shivshaktitraders.com')
 EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = env('EMAIL_HOST', '')
+EMAIL_PORT = env_int('EMAIL_PORT', 587)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = env_bool('EMAIL_USE_TLS', True)
+EMAIL_TIMEOUT = env_int('EMAIL_TIMEOUT', 30)
 
 # Caching (used for rate limiting)
 CACHES = {
@@ -243,6 +255,23 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 }
 
+# Celery
+REDIS_URL = env('REDIS_URL', '').strip()
+if REDIS_URL:
+    CELERY_BROKER_URL = REDIS_URL
+    CELERY_RESULT_BACKEND = REDIS_URL
+else:
+    CELERY_BROKER_URL = 'memory://'
+    CELERY_RESULT_BACKEND = 'cache+memory://'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = env_int('CELERY_TASK_TIME_LIMIT', 300)
+CELERY_TASK_ALWAYS_EAGER = env_bool('CELERY_TASK_ALWAYS_EAGER', DEBUG and not REDIS_URL)
+CELERY_TASK_EAGER_PROPAGATES = env_bool('CELERY_TASK_EAGER_PROPAGATES', DEBUG)
 SPECTACULAR_SETTINGS = {
     'TITLE': env('API_TITLE', 'Shivshakti Traders API'),
     'VERSION': env('API_VERSION', 'v1'),
@@ -262,4 +291,9 @@ SPECTACULAR_SETTINGS = {
         }
     },
 }
+
+
+
+
+
 
