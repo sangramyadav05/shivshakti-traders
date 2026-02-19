@@ -3,14 +3,16 @@ from django.test import TestCase
 from django.urls import reverse
 
 from enquiries.models import ProductEnquiry
-from products.models import Product
+from products.models import Product, ProductCategory
 
 
 class ProductApiTests(TestCase):
     def setUp(self):
+        self.category = ProductCategory.objects.create(name='Chemical', slug='chemical')
         self.active = Product.objects.create(
             name='Filter Product',
             slug='filter-product',
+            category=self.category,
             short_description='Filter short',
             full_description='Filter full',
             uses='Filter uses',
@@ -19,6 +21,7 @@ class ProductApiTests(TestCase):
         Product.objects.create(
             name='Hidden Product',
             slug='hidden-product',
+            category=self.category,
             short_description='Hidden short',
             full_description='Hidden full',
             uses='Hidden uses',

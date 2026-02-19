@@ -1,0 +1,43 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block page_title %}Dashboard | Shivshakti Traders{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'assets/image/favicon-rounded.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                900: '#0B2E33',
+                700: '#4F7C82',
+                500: '#93B1B5',
+                300: '#B8E3E9',
+                100: '#E8F6F8'
+              }
+            }
+          }
+        }
+      };
+    </script>
+    <link rel="stylesheet" href="{% static 'assets/css/theme.css' %}">
+</head>
+<body class="dashboard-theme min-h-screen antialiased">
+    <main class="dashboard-shell min-h-screen">
+        {% for message in messages %}
+            <div class="mx-auto max-w-5xl px-4 pt-4 sm:px-6 lg:px-8">
+                <div class="form-surface rounded-lg border px-4 py-3 text-sm">{{ message }}</div>
+            </div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </main>
+    {% block extra_dashboard_js %}{% endblock %}
+</body>
+</html>

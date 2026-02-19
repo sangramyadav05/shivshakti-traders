@@ -5,6 +5,8 @@ from enquiries.models import ProductEnquiry
 
 class ProductSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
+    category = serializers.CharField(source='category.name', read_only=True)
+    category_slug = serializers.CharField(source='category.slug', read_only=True)
 
     class Meta:
         model = Product
@@ -12,6 +14,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'slug',
+            'category',
+            'category_slug',
             'short_description',
             'full_description',
             'uses',

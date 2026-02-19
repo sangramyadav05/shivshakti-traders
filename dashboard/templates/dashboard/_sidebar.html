@@ -1,0 +1,15 @@
+<aside class="dashboard-sidebar rounded-2xl p-5">
+    <h2 class="text-lg font-semibold text-white">Control Panel</h2>
+    <p class="mt-1 text-sm text-white/75">Operational workspace</p>
+    <nav class="mt-6 space-y-2">
+        <a href="{% url 'dashboard:dashboard_home' %}" class="dashboard-sidebar-link block rounded-lg px-3 py-2 text-sm font-semibold {% if sidebar_active == 'overview' %}is-active{% endif %}">Overview</a>
+        <a href="{% url 'dashboard:dashboard_products' %}" class="dashboard-sidebar-link block rounded-lg px-3 py-2 text-sm font-medium {% if sidebar_active == 'products' %}is-active{% endif %}">Products</a>
+        <a href="{% url 'dashboard:dashboard_enquiries' %}" class="dashboard-sidebar-link block rounded-lg px-3 py-2 text-sm font-medium {% if sidebar_active == 'enquiries' %}is-active{% endif %}">Enquiries</a>
+    </nav>
+    <form class="mt-6" method="post" action="{% url 'dashboard:dashboard_logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="card-btn-primary inline-flex w-full justify-center rounded-lg px-4 py-2 text-sm font-semibold transition">
+            Logout
+        </button>
+    </form>
+</aside>

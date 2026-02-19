@@ -1,16 +1,18 @@
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.core.cache import cache
-from products.models import Product
+from products.models import Product, ProductCategory
 from .models import GeneralEnquiry, ProductEnquiry
 
 
 class EnquiryViewTests(TestCase):
     def setUp(self):
         cache.clear()
+        self.category = ProductCategory.objects.create(name='Chemical', slug='chemical')
         self.product = Product.objects.create(
             name='Product A',
             slug='product-a',
+            category=self.category,
             short_description='Short',
             full_description='Full',
             uses='Uses',

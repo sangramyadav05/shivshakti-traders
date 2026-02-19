@@ -4,49 +4,56 @@
 {% block meta_description %}Trusted partner for quality products and dependable business supply.{% endblock %}
 
 {% block content %}
-<section class="hero-premium min-h-[84vh] bg-cover bg-center pt-24" style="background-image: url('{% static 'assets/image/hero-corporate.jpg' %}');">
+<section class="hero-premium hero-home-bg min-h-[84vh] pt-24">
     <div class="mx-auto flex min-h-[74vh] max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-        <div class="hero-copy max-w-3xl text-white">
-            <p class="mb-5 inline-flex rounded-full border border-white/30 bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.2em] text-white/90">Business Information Portal</p>
-            <h1 class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-7xl">Shivshakti Traders</h1>
-            <p class="mt-6 max-w-2xl text-xl font-medium leading-relaxed text-slate-100/90 sm:text-2xl">Reliable industrial supply partner delivering quality chemicals and treatment materials for professional operations.</p>
-            <div class="mt-10">
-                <a class="inline-flex rounded-md border border-white/25 bg-white/10 px-7 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-brand-900" href="{% url 'products:product_list' %}">Explore Products</a>
+        <div class="hero-copy max-w-3xl">
+            <p class="hero-kicker mb-5 inline-flex rounded-full border px-4 py-1 text-xs uppercase">Business Information Portal</p>
+            <h1 class="hero-title text-4xl font-extrabold leading-tight sm:text-5xl lg:text-7xl">Shivshakti Traders</h1>
+            <span class="hero-title-underline" aria-hidden="true"></span>
+            <p class="hero-description mt-6 max-w-2xl text-xl font-medium leading-relaxed sm:text-2xl">Reliable industrial supply partner delivering quality chemicals and treatment materials for professional operations.</p>
+            <div class="mt-10 flex flex-wrap gap-3">
+                <a class="hero-cta inline-flex rounded-md border px-7 py-3 text-sm font-semibold transition hover:-translate-y-0.5" href="{% url 'products:product_list' %}">Explore Products</a>
+                <a class="hero-cta-outline inline-flex rounded-md border px-7 py-3 text-sm font-semibold transition hover:-translate-y-0.5" href="{% url 'enquiries:enquiry' %}">Send Enquiry</a>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-16">
+<section class="featured-section py-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mb-10 flex flex-wrap items-end justify-between gap-4 reveal">
             <div>
-                <h2 class="text-3xl font-semibold text-slate-900">Featured Products</h2>
-                <p class="mt-2 text-slate-600">A concise view of core business offerings.</p>
+                <h2 class="section-heading-accent text-3xl font-semibold">Featured Products</h2>
+                <p class="mt-2">A concise view of core business offerings.</p>
             </div>
-            <a href="{% url 'products:product_list' %}" class="rounded-md border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-500 hover:text-slate-900">View All</a>
+            <a href="{% url 'products:product_list' %}" class="card-btn-secondary inline-flex rounded-md border px-5 py-2.5 text-sm font-semibold transition">View All</a>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="product-card-grid grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {% for product in featured_products %}
-                <article class="card-lift overflow-hidden rounded-xl border border-slate-200 bg-white shadow-soft reveal">
-                    <div class="product-image-shell">
+                <article class="product-card group card-lift reveal overflow-hidden rounded-2xl border p-0 transition-all duration-300">
+                    <div class="product-image-shell flex h-40 items-center justify-center border-b p-3">
                         {% if product.image %}
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            <img class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105" src="{{ product.image.url }}" alt="{{ product.name }}">
                         {% else %}
-                            <div class="placeholder-img">No image available</div>
+                            <div class="placeholder-img text-sm">No image available</div>
                         {% endif %}
                     </div>
-                    <div class="relative flex min-h-[156px] flex-col p-5">
-                        <h3 class="product-card-title text-xl font-semibold leading-snug text-slate-900">{{ product.name }}</h3>
-                        <div class="absolute bottom-5 left-5 right-5 flex items-center justify-between">
-                            <a class="card-btn-secondary inline-flex w-fit items-center rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-700 hover:text-slate-900" href="{% url 'enquiries:product_enquiry' product.slug %}">Enquiry</a>
-                            <a class="card-btn-primary inline-flex w-fit items-center rounded-md bg-brand-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-600" href="{{ product.get_absolute_url }}">View Details</a>
+                    <div class="product-card-body flex min-h-[138px] flex-col p-4">
+                        <div class="mb-2 min-h-[1.3rem]">
+                            {% if product.is_featured %}
+                                <span class="product-badge inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide">Featured</span>
+                            {% endif %}
+                        </div>
+                        <h3 class="product-card-title text-base font-semibold">{{ product.name }}</h3>
+                        <div class="product-card-actions flex items-center justify-between gap-2 pt-4">
+                            <a class="card-btn-secondary inline-flex items-center rounded-md border px-3 py-1.5 text-xs font-semibold transition" href="{% url 'enquiries:product_enquiry' product.slug %}">Enquiry</a>
+                            <a class="card-btn-primary inline-flex items-center rounded-md px-3 py-1.5 text-xs font-semibold transition" href="{% url 'products:product_detail' product.slug %}">View Details</a>
                         </div>
                     </div>
                 </article>
             {% empty %}
-                <p class="text-slate-600">Products will appear here once added from admin.</p>
+                <p>Products will appear here once added from admin.</p>
             {% endfor %}
         </div>
     </div>

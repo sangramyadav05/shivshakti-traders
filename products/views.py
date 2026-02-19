@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.views.generic import DetailView, ListView
 from enquiries.forms import ProductEnquiryForm
-from .models import Product
+from .models import Product, ProductCategory
 
 
 class ProductListView(ListView):
@@ -12,7 +12,11 @@ class ProductListView(ListView):
     paginate_by = 9
 
     def get_queryset(self):
-        queryset = Product.objects.filter(is_active=True)
+        queryset = Product.objects.filter(is_active=True).select_related('category')
+        category_slug = self.request.GET.get('category', '').strip()
+        if category_slug:
+            queryset = queryset.filter(category__slug=category_slug)
+
         q = self.request.GET.get('q', '').strip()
         if q:
             queryset = queryset.filter(
@@ -30,6 +34,8 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['categories'] = ProductCategory.objects.order_by('name')
+        context['current_category'] = self.request.GET.get('category', '').strip()
         context['current_q'] = self.request.GET.get('q', '').strip()
         context['current_ordering'] = self.request.GET.get('ordering', 'name')
         return context
@@ -41,6 +47,9 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
+
+    def get_queryset(self):
+        return Product.objects.filter(is_active=True).select_related('category')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -5,6 +5,7 @@
     var navToggle = document.getElementById('navToggle');
     var mobileNav = document.getElementById('mobileNav');
     var scrollProgress = document.getElementById('scrollProgress');
+    var hero = document.querySelector('.hero-premium');
 
     navLinks.forEach(function (link) {
         var href = link.getAttribute('href');
@@ -64,9 +65,23 @@
     window.addEventListener('scroll', onScrollProgress, { passive: true });
     window.addEventListener('resize', onScrollProgress, { passive: true });
 
+    function updateHeroParallax() {
+        if (!hero) {
+            return;
+        }
+        var y = Math.min(window.scrollY * 0.2, 60);
+        hero.style.backgroundPosition = 'center calc(50% + ' + y + 'px)';
+    }
+
+    updateHeroParallax();
+    window.addEventListener('scroll', updateHeroParallax, { passive: true });
+
     var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     document.querySelectorAll('main section, footer').forEach(function (el) {
+        if (el.classList.contains('hero-premium')) {
+            return;
+        }
         if (!el.classList.contains('reveal') && !el.classList.contains('detail-fade')) {
             el.classList.add('scroll-fade');
         }
@@ -81,6 +96,13 @@
     });
 
     var revealTargets = document.querySelectorAll('.reveal, .scroll-fade, .scroll-slide-up');
+
+    revealTargets.forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.92) {
+            el.classList.add('is-visible');
+        }
+    });
 
     if (prefersReducedMotion) {
         revealTargets.forEach(function (el) {

@@ -30,7 +30,7 @@ class AuditRequestContextMiddleware:
         return response
 
     def _is_dashboard_path(self, path):
-        return path == '/business-dashboard/' or path == '/business-dashboard'
+        return path.startswith('/dashboard/')
 
     def _get_client_ip(self, request):
         remote_addr = (request.META.get('REMOTE_ADDR') or '').strip()

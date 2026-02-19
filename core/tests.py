@@ -1,13 +1,15 @@
 from django.test import TestCase
 from django.urls import reverse
-from products.models import Product
+from products.models import Product, ProductCategory
 
 
 class CoreViewTests(TestCase):
     def test_home_page_renders(self):
+        category = ProductCategory.objects.create(name='Chemical', slug='chemical')
         Product.objects.create(
             name='Test Product',
             slug='test-product',
+            category=category,
             short_description='Short description',
             full_description='Full description',
             uses='Use case',

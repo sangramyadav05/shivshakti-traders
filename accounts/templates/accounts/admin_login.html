@@ -5,12 +5,12 @@
 {% block content %}
 <section class="py-16">
     <div class="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-        <div class="reveal mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
+        <div class="reveal form-surface mb-6 rounded-2xl p-6">
             <div class="mb-4 flex items-center gap-3">
                 <img src="{% static 'assets/image/logo.png' %}" alt="Shivshakti Traders logo" class="h-12 w-12 rounded-lg object-cover">
                 <div>
-                    <h1 class="text-2xl font-semibold text-slate-900">Admin Login</h1>
-                    <p class="text-sm text-slate-600">Authorized access for administration and enquiry review.</p>
+                    <h1 class="text-2xl font-semibold">Admin Login</h1>
+                    <p class="text-sm">Authorized access for administration and enquiry review.</p>
                 </div>
             </div>
 
@@ -32,18 +32,18 @@
                 {% csrf_token %}
                 {% for field in form %}
                     <div>
-                        <label class="mb-2 block text-sm font-semibold text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <label class="mb-2 block text-sm font-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
                         {{ field }}
                         {% if field.errors %}
                             <div class="mt-1 text-sm text-red-600">{{ field.errors|striptags }}</div>
                         {% endif %}
                     </div>
                 {% endfor %}
-                <button type="submit" class="inline-flex rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Sign In</button>
+                <button type="submit" class="card-btn-primary inline-flex rounded-md px-5 py-2.5 text-sm font-semibold">Sign In</button>
             </form>
         </div>
 
-        <p class="mt-3 text-sm text-slate-500">After login you will be redirected to <code class="rounded bg-slate-100 px-1.5 py-0.5">{{ admin_url }}</code>.</p>
+        <p class="mt-3 text-sm">After login you will be redirected to <code class="rounded bg-white/50 px-1.5 py-0.5">{{ admin_url }}</code>.</p>
     </div>
 </section>
 {% endblock %}

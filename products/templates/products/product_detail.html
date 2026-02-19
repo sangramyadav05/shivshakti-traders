@@ -1,40 +1,51 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% block page_title %}{{ product.name }} | Shivshakti Traders{% endblock %}
 {% block meta_description %}{{ product.short_description|truncatechars:150 }}{% endblock %}
 
 {% block content %}
 <section class="py-16">
     <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-        <div class="detail-fade">
-            <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-soft">
+        <div class="reveal">
+            <div class="card-lift group overflow-hidden rounded-2xl border p-4">
                 {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="aspect-square w-full object-contain">
+                    <div class="product-image-shell flex h-[420px] items-center justify-center overflow-hidden rounded-xl border p-4">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105">
+                    </div>
                 {% else %}
                     <div class="placeholder-img large">No image available</div>
                 {% endif %}
             </div>
         </div>
-        <div class="detail-fade delay-1">
-            <h1 class="text-4xl font-semibold text-slate-900">{{ product.name }}</h1>
-            <div class="mt-6 border-t border-slate-200 pt-5">
-                <h2 class="text-lg font-semibold uppercase tracking-wide text-slate-800">Description</h2>
-                <p class="mt-3 leading-relaxed text-slate-700">{{ product.full_description }}</p>
+        <div class="reveal">
+            <div class="mb-3 min-h-[1.3rem]">
+                {% if product.category %}
+                    <span class="category-badge inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide">{{ product.category.name }}</span>
+                {% endif %}
+                {% if product.is_featured %}
+                    <span class="product-badge inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide">Featured</span>
+                {% endif %}
+            </div>
+            <h1 class="section-heading-accent text-4xl font-semibold">{{ product.name }}</h1>
+
+            <div class="form-surface mt-6 rounded-2xl border p-6 shadow-soft">
+                <h2 class="text-lg font-semibold uppercase tracking-wide">Description</h2>
+                <p class="mt-3 leading-relaxed">{{ product.full_description }}</p>
             </div>
 
-            <div class="mt-6 border-t border-slate-200 pt-5">
-                <h2 class="text-lg font-semibold uppercase tracking-wide text-slate-800">Uses</h2>
-                <p class="mt-3 leading-relaxed text-slate-600">{{ product.uses }}</p>
+            <div class="form-surface mt-6 rounded-2xl border p-6 shadow-soft">
+                <h2 class="text-lg font-semibold uppercase tracking-wide">Uses</h2>
+                <p class="mt-3 leading-relaxed">{{ product.uses }}</p>
             </div>
 
-            <div class="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
-                <h2 class="mb-4 text-lg font-semibold uppercase tracking-wide text-slate-800">Product Specific Enquiry</h2>
+            <div class="form-surface mt-8 rounded-2xl border p-6 shadow-soft">
+                <h2 class="mb-4 text-lg font-semibold uppercase tracking-wide">Product Specific Enquiry</h2>
                 <form method="post" action="{% url 'enquiries:product_enquiry' product.slug %}" class="space-y-4">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}">
                     {% for field in product_enquiry_form %}
                         {% if field.name != 'recaptcha_token' %}
                             <div>
-                                <label class="mb-2 block text-sm font-semibold text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <label class="mb-2 block text-sm font-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {{ field }}
                                 {% if field.errors %}
                                     <div class="mt-1 text-sm text-red-600">{{ field.errors|striptags }}</div>
@@ -50,7 +61,7 @@
                         </div>
                     {% endif %}
 
-                    <button type="submit" class="detail-cta inline-flex rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Submit Product Enquiry</button>
+                    <button type="submit" class="detail-cta card-btn-primary inline-flex rounded-md px-5 py-2.5 text-sm font-semibold transition">Submit Product Enquiry</button>
                 </form>
             </div>
         </div>

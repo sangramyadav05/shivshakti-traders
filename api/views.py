@@ -12,6 +12,7 @@ from .serializers import ProductEnquirySerializer, ProductSerializer
     description='Public endpoint returning active products with optional search and ordering.',
     parameters=[
         OpenApiParameter(name='q', description='Search term', required=False, type=str),
+        OpenApiParameter(name='category', description='Category slug filter', required=False, type=str),
         OpenApiParameter(name='ordering', description='name, -name, created_at, -created_at', required=False, type=str),
     ],
 )
@@ -21,7 +22,11 @@ class ProductListAPIView(generics.ListAPIView):
     throttle_scope = 'products'
 
     def get_queryset(self):
-        queryset = Product.objects.filter(is_active=True)
+        queryset = Product.objects.filter(is_active=True).select_related('category')
+        category_slug = self.request.query_params.get('category', '').strip()
+        if category_slug:
+            queryset = queryset.filter(category__slug=category_slug)
+
         q = self.request.query_params.get('q', '').strip()
         if q:
             queryset = queryset.filter(
@@ -44,7 +49,7 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     permission_classes = [permissions.AllowAny]
     throttle_scope = 'products'
     lookup_field = 'slug'
-    queryset = Product.objects.filter(is_active=True)
+    queryset = Product.objects.filter(is_active=True).select_related('category')
 
 
 @extend_schema(

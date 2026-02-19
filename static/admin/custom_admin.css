@@ -1,0 +1,120 @@
+:root {
+    --admin-white: #FFFFFF;
+    --admin-primary: #367D8A;
+    --admin-secondary: #285F6B;
+    --admin-surface: #133336;
+    --admin-base: #010001;
+}
+
+body {
+    background: var(--admin-base);
+    color: rgba(255, 255, 255, 0.88);
+}
+
+#header {
+    background: rgba(19, 51, 54, 0.95);
+    border-bottom: 1px solid rgba(54, 125, 138, 0.45);
+}
+
+#header a:link,
+#header a:visited,
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited {
+    color: var(--admin-white);
+}
+
+#user-tools {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+div.breadcrumbs {
+    background: rgba(19, 51, 54, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.72);
+}
+
+div.breadcrumbs a {
+    color: #bce4ea;
+}
+
+#content-main .module,
+.inline-group,
+#changelist-filter {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(19, 51, 54, 0.9);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.module caption,
+.inline-group h2,
+#changelist-filter h2 {
+    background: rgba(1, 0, 1, 0.7);
+    color: var(--admin-white);
+}
+
+th,
+td,
+.results th,
+.results td {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.row1,
+.row2,
+tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+input,
+select,
+textarea {
+    color: var(--admin-white) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--admin-primary) !important;
+    box-shadow: 0 0 0 3px rgba(54, 125, 138, 0.22) !important;
+}
+
+button,
+input[type=submit],
+input[type=button],
+.submit-row input,
+a.button {
+    color: var(--admin-white) !important;
+    border-radius: 8px !important;
+    border: 1px solid transparent !important;
+    background: var(--admin-primary) !important;
+    box-shadow: 0 8px 14px rgba(54, 125, 138, 0.3) !important;
+    transition: all 0.25s ease !important;
+}
+
+button:hover,
+input[type=submit]:hover,
+input[type=button]:hover,
+.submit-row input:hover,
+a.button:hover {
+    background: var(--admin-secondary) !important;
+    transform: translateY(-1px);
+}
+
+a:link,
+a:visited {
+    color: #b9e3e9;
+}
+
+a:hover {
+    color: var(--admin-white);
+}
+
+.selector-chosen h2 {
+    background: rgba(1, 0, 1, 0.72) !important;
+}

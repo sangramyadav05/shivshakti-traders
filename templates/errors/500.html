@@ -4,9 +4,9 @@
 {% block content %}
 <section class="py-20">
     <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-        <h1 class="text-5xl font-semibold text-slate-900">500 - Server Error</h1>
-        <p class="mt-4 text-slate-600">Something went wrong on our side. Please try again later.</p>
-        <a href="{% url 'core:home' %}" class="mt-8 inline-flex rounded-md bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600">Back to Home</a>
+        <h1 class="text-5xl font-semibold">500 - Server Error</h1>
+        <p class="mt-4">Something went wrong on our side. Please try again later.</p>
+        <a href="{% url 'core:home' %}" class="card-btn-primary mt-8 inline-flex rounded-md px-5 py-2.5 text-sm font-semibold">Back to Home</a>
     </div>
 </section>
 {% endblock %}

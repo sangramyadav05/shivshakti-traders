@@ -51,22 +51,31 @@ class AdminIPAllowlistMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if self._is_protected_path(request.path):
-            allowed_ips = set(getattr(settings, 'ALLOWED_ADMIN_IPS', []))
-            if not allowed_ips:
-                return HttpResponseForbidden('Admin access is not configured for this source.')
+        # ✅ Do NOT restrict in development
+        if settings.DEBUG:
+            return self.get_response(request)
 
-            client_ip = self._get_client_ip(request)
-            if not client_ip or client_ip not in allowed_ips:
-                return HttpResponseForbidden('Forbidden')
+        if not self._is_protected_path(request.path):
+            return self.get_response(request)
+
+        allowed_ips = set(getattr(settings, 'ALLOWED_ADMIN_IPS', []))
+
+        if not allowed_ips:
+            return HttpResponseForbidden('Admin access is not configured for this source.')
+
+        client_ip = self._get_client_ip(request)
+
+        if not client_ip or client_ip not in allowed_ips:
+            return HttpResponseForbidden('Forbidden')
 
         return self.get_response(request)
+
 
     def _is_protected_path(self, path):
         admin_url = '/' + getattr(settings, 'ADMIN_URL', 'secure-control-panel/').lstrip('/')
         if not admin_url.endswith('/'):
             admin_url = f'{admin_url}/'
-        return path.startswith(admin_url) or path.startswith('/business-dashboard/') or path == '/business-dashboard'
+        return path.startswith(admin_url) or path.startswith('/dashboard/') or path == '/dashboard'
 
     def _get_client_ip(self, request):
         remote_addr = (request.META.get('REMOTE_ADDR') or '').strip()
@@ -87,4 +96,3 @@ class AdminIPAllowlistMiddleware:
             return str(ip_address(raw_ip))
         except ValueError:
             return None
-

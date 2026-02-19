@@ -1,13 +1,15 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Product
+from .models import Product, ProductCategory
 
 
 class ProductViewTests(TestCase):
     def setUp(self):
+        self.category = ProductCategory.objects.create(name='Chemical', slug='chemical')
         self.active_product = Product.objects.create(
             name='Active Product',
             slug='active-product',
+            category=self.category,
             short_description='Active short',
             full_description='Active full description',
             uses='Active uses',
@@ -16,6 +18,7 @@ class ProductViewTests(TestCase):
         Product.objects.create(
             name='Inactive Product',
             slug='inactive-product',
+            category=self.category,
             short_description='Inactive short',
             full_description='Inactive full description',
             uses='Inactive uses',
@@ -47,6 +50,7 @@ class ProductViewTests(TestCase):
         Product.objects.create(
             name='Zulu Product',
             slug='zulu-product',
+            category=self.category,
             short_description='zulu short',
             full_description='zulu full',
             uses='zulu uses',

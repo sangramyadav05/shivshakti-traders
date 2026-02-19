@@ -9,20 +9,15 @@ class HomePageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        featured_slugs = [
-            'bleaching-powder-25kg-packaging',
-            'medicore-m-100ml-bottle',
-            'sodium-hypochlorite-liquid-chemical-can',
-        ]
-        products_by_slug = {
-            product.slug: product
-            for product in Product.objects.filter(is_active=True, slug__in=featured_slugs)
-        }
-        featured_products = [
-            products_by_slug[slug] for slug in featured_slugs if slug in products_by_slug
-        ]
+        featured_products = list(
+            Product.objects.filter(is_active=True, is_featured=True)
+            .select_related('category')
+            .order_by('name')[:4]
+        )
         if not featured_products:
-            featured_products = list(Product.objects.filter(is_active=True).order_by('name')[:3])
+            featured_products = list(
+                Product.objects.filter(is_active=True).select_related('category').order_by('name')[:4]
+            )
         context['featured_products'] = featured_products
         return context
 

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block page_title %}Dashboard Login | Shivshakti Traders{% endblock %}
+
+{% block content %}
+<section class="flex min-h-[70vh] items-center justify-center px-4 py-10">
+    <div class="dashboard-login-card w-full max-w-md rounded-2xl p-6 sm:p-8">
+        <h1 class="text-2xl font-bold">Business Dashboard Login</h1>
+        <p class="mt-2 text-sm">Sign in to access your control panel.</p>
+
+        <form method="post" class="mt-6 space-y-4">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div>
+                <label class="mb-1 block text-sm font-medium" for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}<p class="mt-1 text-xs text-rose-700">{{ form.username.errors|join:', ' }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label class="mb-1 block text-sm font-medium" for="{{ form.password.id_for_label }}">Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}<p class="mt-1 text-xs text-rose-700">{{ form.password.errors|join:', ' }}</p>{% endif %}
+            </div>
+
+            <button type="submit" class="card-btn-primary inline-flex w-full justify-center rounded-lg px-4 py-2.5 text-sm font-semibold transition">
+                Login
+            </button>
+            <a href="{% url 'core:home' %}" class="card-btn-secondary inline-flex w-full justify-center rounded-lg border px-4 py-2.5 text-sm font-semibold transition">
+                Go to Home Page
+            </a>
+        </form>
+    </div>
+</section>
+{% endblock %}

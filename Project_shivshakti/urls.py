@@ -37,7 +37,7 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('enquiries/', include('enquiries.urls')),
     path('accounts/', include('accounts.urls')),
-    path('business-dashboard/', include('dashboard.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
     path('robots.txt', RobotsTxtView.as_view(), name='robots_txt'),
 ]
