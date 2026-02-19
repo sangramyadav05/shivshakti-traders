@@ -18,6 +18,7 @@ handler500 = 'core.views.custom_500_view'
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path(settings.ADMIN_LOGIN_URL, StaffAdminLoginView.as_view(), name='custom_admin_login'),
+    path('api/', include('api.urls')),
     path('', include('core.urls')),
     path('products/', include('products.urls')),
     path('enquiries/', include('enquiries.urls')),

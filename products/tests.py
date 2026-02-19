@@ -36,3 +36,23 @@ class ProductViewTests(TestCase):
 
     def test_get_absolute_url(self):
         self.assertEqual(self.active_product.get_absolute_url(), '/products/active-product/')
+
+    def test_product_list_search_filters_results(self):
+        response = self.client.get(reverse('products:product_list'), {'q': 'Active'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Active Product')
+        self.assertNotContains(response, 'Inactive Product')
+
+    def test_product_list_ordering_desc(self):
+        Product.objects.create(
+            name='Zulu Product',
+            slug='zulu-product',
+            short_description='zulu short',
+            full_description='zulu full',
+            uses='zulu uses',
+            is_active=True,
+        )
+        response = self.client.get(reverse('products:product_list'), {'ordering': '-name'})
+        self.assertEqual(response.status_code, 200)
+        products = list(response.context['products'])
+        self.assertEqual(products[0].name, 'Zulu Product')
