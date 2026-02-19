@@ -1,4 +1,5 @@
-﻿import os
+import os
+from datetime import timedelta
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 
@@ -44,10 +45,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'rest_framework',
+    'drf_spectacular',
+    'rest_framework_simplejwt.token_blacklist',
     'core.apps.CoreConfig',
     'products.apps.ProductsConfig',
     'enquiries.apps.EnquiriesConfig',
     'accounts.apps.AccountsConfig',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +147,7 @@ CACHES = {
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
@@ -198,3 +204,59 @@ LOGGING = {
 }
 
 ADMINS = [('Site Admin', ADMIN_NOTIFICATION_EMAIL)]
+
+# DRF
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': env_int('API_PAGE_SIZE', 12),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': env('API_THROTTLE_ANON', '60/min'),
+        'user': env('API_THROTTLE_USER', '120/min'),
+        'products': env('API_THROTTLE_PRODUCTS', '120/min'),
+        'enquiries': env('API_THROTTLE_ENQUIRIES', '30/min'),
+    },
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=env_int('JWT_ACCESS_TOKEN_MINUTES', 15)),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=env_int('JWT_REFRESH_TOKEN_DAYS', 7)),
+    'ROTATE_REFRESH_TOKENS': env_bool('JWT_ROTATE_REFRESH_TOKENS', True),
+    'BLACKLIST_AFTER_ROTATION': env_bool('JWT_BLACKLIST_AFTER_ROTATION', True),
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': env('JWT_SIGNING_KEY', SECRET_KEY),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'UPDATE_LAST_LOGIN': False,
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': env('API_TITLE', 'Shivshakti Traders API'),
+    'VERSION': env('API_VERSION', 'v1'),
+    'DESCRIPTION': env(
+        'API_DESCRIPTION',
+        'REST API for Shivshakti Traders products and enquiries. '
+        'Use JWT Bearer token for protected endpoints.',
+    ),
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SECURITY': [{'BearerAuth': []}],
+    'SECURITY_SCHEMES': {
+        'BearerAuth': {
+            'type': 'http',
+            'scheme': 'bearer',
+            'bearerFormat': 'JWT',
+        }
+    },
+}
