@@ -63,6 +63,11 @@ class AccountLoginView(LoginRateLimitMixin, LoginView):
     next_page = reverse_lazy('core:home')
     rate_limit_scope = 'account-login'
 
+    def get_success_url(self):
+        if self.request.user.is_staff:
+            return reverse('dashboard:business_dashboard')
+        return super().get_success_url()
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         return _apply_auth_widget_classes(form)
@@ -123,3 +128,4 @@ class StaffAdminLoginView(FormView):
         context = super().get_context_data(**kwargs)
         context['admin_url'] = '/' + settings.ADMIN_URL.lstrip('/')
         return context
+

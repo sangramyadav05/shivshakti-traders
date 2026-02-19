@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -82,7 +82,7 @@
                 <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'products:product_list' %}">Products</a></li>
                 <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'core:contact' %}">Contact</a></li>
                 <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'enquiries:enquiry' %}">Enquiry</a></li>
-                <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'custom_admin_login' %}">Admin Login</a></li>
+                <li><a class="nav-link rounded-md px-3 py-2 text-lg text-white/80 transition hover:text-white" href="{% url 'accounts:login' %}">Login</a></li>
             </ul>
         </div>
         <div id="mobileNav" class="hidden border-t border-white/10 bg-brand-900 px-4 pb-4 md:hidden">
@@ -92,7 +92,7 @@
                 <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'products:product_list' %}">Products</a></li>
                 <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'core:contact' %}">Contact</a></li>
                 <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'enquiries:enquiry' %}">Enquiry</a></li>
-                <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'custom_admin_login' %}">Admin Login</a></li>
+                <li><a class="nav-link block rounded-md px-3 py-2 text-base text-white/85" href="{% url 'accounts:login' %}">Login</a></li>
             </ul>
         </div>
     </nav>
@@ -117,7 +117,7 @@
                 <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'products:product_list' %}">Products</a></li>
                 <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'core:contact' %}">Contact</a></li>
                 <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'enquiries:enquiry' %}">Enquiry</a></li>
-                <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'custom_admin_login' %}">Admin Login</a></li>
+                <li><a class="inline-flex transition-colors duration-200 hover:text-brand-300" href="{% url 'accounts:login' %}">Login</a></li>
             </ul>
         </div>
         <div>
@@ -155,4 +155,6 @@
 <script src="{% static 'assets/js/main.js' %}"></script>
 </body>
 </html>
+
+
 
