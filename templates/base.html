@@ -67,8 +67,10 @@
                 <img src="{% static 'assets/image/logo.png' %}" alt="Shivshakti Traders Logo" class="h-10 w-10 rounded-md border border-white/30 bg-white/95 object-contain p-1">
                 <span>Shivshakti Traders</span>
             </a>
-            <button id="navToggle" class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/25 text-white md:hidden" type="button" aria-label="Toggle navigation">
-                <span class="block h-0.5 w-5 bg-white"></span>
+            <button id="navToggle" class="hamburger inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/25 text-white md:hidden" type="button" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
+                <span class="hamburger-line block h-0.5 w-5 bg-white"></span>
+                <span class="hamburger-line block h-0.5 w-5 bg-white"></span>
+                <span class="hamburger-line block h-0.5 w-5 bg-white"></span>
             </button>
             <ul id="mainNav" class="hidden items-center gap-2 md:flex">
                 <li><a class="nav-link rounded-md px-3 py-2 text-base" href="{% url 'core:home' %}">Home</a></li>
@@ -79,16 +81,23 @@
                 <li><a class="nav-link rounded-md px-3 py-2 text-base" href="{% url 'dashboard:dashboard_login' %}">Login</a></li>
             </ul>
         </div>
-        <div id="mobileNav" class="hidden border-t border-white/10 bg-brand-900 px-4 pb-4 md:hidden">
-            <ul class="space-y-2 pt-3">
-                <li><a class="nav-link block rounded-md px-3 py-2 text-base" href="{% url 'core:home' %}">Home</a></li>
-                <li><a class="nav-link block rounded-md px-3 py-2 text-base" href="{% url 'core:about' %}">About</a></li>
-                <li><a class="nav-link block rounded-md px-3 py-2 text-base" href="{% url 'products:product_list' %}">Products</a></li>
-                <li><a class="nav-link block rounded-md px-3 py-2 text-base" href="{% url 'core:contact' %}">Contact</a></li>
-                <li><a class="nav-link block rounded-md px-3 py-2 text-base" href="{% url 'enquiries:enquiry' %}">Enquiry</a></li>
-                <li><a class="nav-link block rounded-md px-3 py-2 text-base" href="{% url 'dashboard:dashboard_login' %}">Login</a></li>
+        <div id="mobileOverlay" class="mobile-overlay hidden md:hidden" aria-hidden="true"></div>
+        <aside id="mobileNav" class="mobile-sidebar md:hidden" aria-hidden="true" aria-label="Mobile navigation">
+            <div class="flex items-center justify-between border-b border-white/10 px-4 py-4">
+                <span class="text-base font-semibold text-white">Menu</span>
+                <button id="mobileNavClose" class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/20 text-white" type="button" aria-label="Close menu">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <ul class="space-y-2 p-4">
+                <li><a class="nav-link mobile-nav-link block rounded-md px-3 py-2 text-base" href="{% url 'core:home' %}">Home</a></li>
+                <li><a class="nav-link mobile-nav-link block rounded-md px-3 py-2 text-base" href="{% url 'core:about' %}">About</a></li>
+                <li><a class="nav-link mobile-nav-link block rounded-md px-3 py-2 text-base" href="{% url 'products:product_list' %}">Products</a></li>
+                <li><a class="nav-link mobile-nav-link block rounded-md px-3 py-2 text-base" href="{% url 'core:contact' %}">Contact</a></li>
+                <li><a class="nav-link mobile-nav-link block rounded-md px-3 py-2 text-base" href="{% url 'enquiries:enquiry' %}">Enquiry</a></li>
+                <li><a class="nav-link mobile-nav-link block rounded-md px-3 py-2 text-base" href="{% url 'dashboard:dashboard_login' %}">Login</a></li>
             </ul>
-        </div>
+        </aside>
     </nav>
 </header>
 
@@ -141,14 +150,13 @@
         </div>
     </div>
     <div class="border-t border-white/10 py-4 text-center text-xs text-white/60">
-        <p>&copy; 2026 Shivshakti Traders. All rights reserved.</p>
-        <p class="mt-1">Design and Developed by Sangram Yadav</p>
+        <p>&copy; 2026 Shivshakti Traders. All rights reserved.</p><br>
+        <p class="mt-1">Design and Developed by: Gravix Technologies <br>Email: gravixtechnologies.llp@gmail.com</p>
     </div>
 </footer>
 
 <script src="{% static 'assets/js/main.js' %}"></script>
 </body>
 </html>
-
 
 

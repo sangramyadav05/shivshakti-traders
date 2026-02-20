@@ -121,6 +121,42 @@ label {
     font-weight: 600;
 }
 
+.hamburger {
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mobile-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 80;
+    width: min(82vw, 320px);
+    height: 100dvh;
+    background: var(--color-dark);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+    overflow-y: auto;
+}
+
+.mobile-sidebar.is-open {
+    transform: translateX(0);
+}
+
+.mobile-nav-link::after {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.2rem;
+}
+
 .hero-premium {
     position: relative;
     overflow: hidden;

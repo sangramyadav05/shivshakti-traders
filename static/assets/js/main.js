@@ -4,6 +4,9 @@
     var navbar = document.getElementById('siteNavbar');
     var navToggle = document.getElementById('navToggle');
     var mobileNav = document.getElementById('mobileNav');
+    var mobileNavClose = document.getElementById('mobileNavClose');
+    var mobileOverlay = document.getElementById('mobileOverlay');
+    var mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     var scrollProgress = document.getElementById('scrollProgress');
     var hero = document.querySelector('.hero-premium');
 
@@ -26,9 +29,51 @@
         }
     }
 
-    if (navToggle && mobileNav) {
+    function openMobileMenu() {
+        if (!mobileNav || !navToggle || !mobileOverlay) {
+            return;
+        }
+        mobileNav.classList.add('is-open');
+        navToggle.setAttribute('aria-expanded', 'true');
+        mobileNav.setAttribute('aria-hidden', 'false');
+        mobileOverlay.classList.remove('hidden');
+        mobileOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+        if (!mobileNav || !navToggle || !mobileOverlay) {
+            return;
+        }
+        mobileNav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        mobileNav.setAttribute('aria-hidden', 'true');
+        mobileOverlay.classList.add('hidden');
+        mobileOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    if (navToggle && mobileNav && mobileOverlay) {
         navToggle.addEventListener('click', function () {
-            mobileNav.classList.toggle('hidden');
+            if (mobileNav.classList.contains('is-open')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+    }
+
+    if (mobileNavClose) {
+        mobileNavClose.addEventListener('click', closeMobileMenu);
+    }
+
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+    }
+
+    if (mobileNavLinks.length) {
+        mobileNavLinks.forEach(function (link) {
+            link.addEventListener('click', closeMobileMenu);
         });
     }
 
@@ -75,6 +120,12 @@
 
     updateHeroParallax();
     window.addEventListener('scroll', updateHeroParallax, { passive: true });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && mobileNav && mobileNav.classList.contains('is-open')) {
+            closeMobileMenu();
+        }
+    });
 
     var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
