@@ -3,7 +3,8 @@ from django.core.exceptions import ImproperlyConfigured
 
 from .base import *
 
-DEBUG = True
+DEBUG = False
+
 SECRET_KEY = env('SECRET_KEY', env('DJANGO_SECRET_KEY', '')).strip()
 if not SECRET_KEY:
     raise ImproperlyConfigured('SECRET_KEY must be set in production.')
@@ -25,10 +26,6 @@ if csrf_trusted_origins_raw:
 else:
     CSRF_TRUSTED_ORIGINS = []
 
-CSRF_TRUSTED_ORIGINS = [
-    os.environ.get("CSRF_TRUSTED_ORIGINS"),
-]
-
 DATABASE_URL = env('DATABASE_URL', '').strip()
 if not DATABASE_URL:
     raise ImproperlyConfigured('DATABASE_URL must be set in production.')
@@ -44,7 +41,7 @@ DATABASES = {
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {
     'default': {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
     },
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
@@ -79,5 +76,3 @@ CLOUDINARY_STORAGE = {
     "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
     "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
 }
-
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
