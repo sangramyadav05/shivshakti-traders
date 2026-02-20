@@ -9,8 +9,10 @@ SECRET_KEY = env('SECRET_KEY', env('DJANGO_SECRET_KEY', '')).strip()
 if not SECRET_KEY:
     raise ImproperlyConfigured('SECRET_KEY must be set in production.')
 
-allowed_hosts_raw = env('ALLOWED_HOSTS', env('DJANGO_ALLOWED_HOSTS', '')).strip()
+# allowed_hosts_raw = env('ALLOWED_HOSTS', env('DJANGO_ALLOWED_HOSTS', '')).strip()
+
 ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_raw.split(',') if host.strip()]
+
 if not ALLOWED_HOSTS:
     raise ImproperlyConfigured('ALLOWED_HOSTS must be set in production.')
 
