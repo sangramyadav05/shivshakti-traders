@@ -20,6 +20,10 @@ if csrf_trusted_origins_raw:
 else:
     CSRF_TRUSTED_ORIGINS = [f'https://{host}' for host in ALLOWED_HOSTS if host not in {'localhost', '127.0.0.1'}]
 
+CSRF_TRUSTED_ORIGINS = [
+    os.environ.get("CSRF_TRUSTED_ORIGINS"),
+]
+
 DATABASE_URL = env('DATABASE_URL', '').strip()
 if not DATABASE_URL:
     raise ImproperlyConfigured('DATABASE_URL must be set in production.')
