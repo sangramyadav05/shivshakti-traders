@@ -3,7 +3,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 from .base import *
 
-DEBUG = False
+DEBUG = True
 
 SECRET_KEY = env('SECRET_KEY', env('DJANGO_SECRET_KEY', '')).strip()
 if not SECRET_KEY:
