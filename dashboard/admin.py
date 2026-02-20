@@ -92,11 +92,14 @@ class DashboardUserAdmin(admin.ModelAdmin):
         ('Set Password', {'fields': ('password1', 'password2')}),
     )
 
-    def get_form(self, request, obj=None, **kwargs):
-        defaults = {}
+    def get_fieldsets(self, request, obj=None):
         if obj is None:
-            defaults['form'] = self.add_form
-            defaults['fields'] = ('username', 'is_active', 'password1', 'password2')
-        kwargs.update(defaults)
-        return super().get_form(request, obj, **kwargs)
+            return self.add_fieldsets
+        return super().get_fieldsets(request, obj)
 
+    def get_form(self, request, obj=None, **kwargs):
+        if obj is None:
+            kwargs['form'] = self.add_form
+        else:
+            kwargs['form'] = self.form
+        return super().get_form(request, obj, **kwargs)
