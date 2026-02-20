@@ -4,23 +4,28 @@ from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
 DEBUG = False
+DEBUG = False
 
 SECRET_KEY = env('SECRET_KEY', env('DJANGO_SECRET_KEY', '')).strip()
 if not SECRET_KEY:
     raise ImproperlyConfigured('SECRET_KEY must be set in production.')
 
-# allowed_hosts_raw = env('ALLOWED_HOSTS', env('DJANGO_ALLOWED_HOSTS', '')).strip()
-
+allowed_hosts_raw = env('ALLOWED_HOSTS', '').strip()
 ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_raw.split(',') if host.strip()]
 
 if not ALLOWED_HOSTS:
     raise ImproperlyConfigured('ALLOWED_HOSTS must be set in production.')
 
-csrf_trusted_origins_raw = env('CSRF_TRUSTED_ORIGINS', env('DJANGO_CSRF_TRUSTED_ORIGINS', '')).strip()
+csrf_trusted_origins_raw = env('CSRF_TRUSTED_ORIGINS', '').strip()
+
 if csrf_trusted_origins_raw:
-    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_trusted_origins_raw.split(',') if origin.strip()]
+    CSRF_TRUSTED_ORIGINS = [
+        origin.strip()
+        for origin in csrf_trusted_origins_raw.split(',')
+        if origin.strip()
+    ]
 else:
-    CSRF_TRUSTED_ORIGINS = [f'https://{host}' for host in ALLOWED_HOSTS if host not in {'localhost', '127.0.0.1'}]
+    CSRF_TRUSTED_ORIGINS = []
 
 CSRF_TRUSTED_ORIGINS = [
     os.environ.get("CSRF_TRUSTED_ORIGINS"),
