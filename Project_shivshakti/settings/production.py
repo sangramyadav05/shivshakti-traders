@@ -3,9 +3,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 from .base import *
 
-DEBUG = False
-DEBUG = False
-
+DEBUG = True
 SECRET_KEY = env('SECRET_KEY', env('DJANGO_SECRET_KEY', '')).strip()
 if not SECRET_KEY:
     raise ImproperlyConfigured('SECRET_KEY must be set in production.')
@@ -56,6 +54,7 @@ STORAGES = {
 SECURE_SSL_REDIRECT = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
+USE_X_FORWARDED_HOST = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = env_int('SECURE_HSTS_SECONDS', 31536000)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
